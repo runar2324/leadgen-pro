@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UtleiePro – Profesjonell utleieadministrasjon på ett sted</title>
+    <meta name="description" content="Administrer boliger, kommuniser med leietakere, håndter skader og kontrakter – alt i én plattform for profesjonelle utleiere.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0F172A;
+            --primary-light: #1E293B;
+            --accent: #2563EB;
+            --accent-hover: #1D4ED8;
+            --accent-glow: rgba(37, 99, 235, 0.25);
+            --teal: #0D9488;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --text: #334155;
+            --text-light: #64748B;
+            --bg: #F8FAFC;
+            --white: #FFFFFF;
+            --border: #E2E8F0;
+            --gradient: linear-gradient(135deg, #2563EB 0%, #0D9488 100%);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: box-shadow 0.2s;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 38px; height: 38px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+        .btn-ghost {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-ghost:hover { background: var(--bg); }
+
+        .btn-nav {
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover { background: var(--primary-light); transform: translateY(-1px); }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 8rem 2rem 5rem;
+            text-align: center;
+            background: linear-gradient(180deg, #fff 0%, #F1F5F9 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px; left: 50%;
+            transform: translateX(-50%);
+            width: 900px; height: 900px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .hero-badge .badge-pill {
+            background: var(--gradient);
+            color: white;
+            padding: 0.125rem 0.625rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.25rem, 5vw, 3.75rem);
+            font-weight: 800;
+            color: var(--primary);
+            max-width: 820px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 580px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.5); }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover { background: #F8FAFC; border-color: #CBD5E1; }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border);
+            max-width: 560px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .stat { text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .stat-label { font-size: 0.875rem; color: var(--text-light); }
+
+        /* ── Section shared ── */
+        section.section { padding: 5rem 2rem; }
+
+        .section-header {
+            text-align: center;
+            max-width: 620px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p { font-size: 1.1rem; color: var(--text-light); }
+
+        /* ── Features ── */
+        .features { background: white; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .feature-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 0.625rem; }
+        .feature-card p { color: var(--text-light); font-size: 0.9rem; line-height: 1.65; }
+
+        /* ── How it works ── */
+        .how-it-works { background: var(--primary); color: white; }
+        .how-it-works .section-header h2 { color: white; }
+        .how-it-works .section-header p { color: rgba(255,255,255,0.65); }
+        .how-it-works .section-tag { color: #67E8F9; }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .step {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 48px; height: 48px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.125rem;
+            margin: 0 auto 1.25rem;
+            color: white;
+        }
+
+        .step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.625rem; }
+        .step p { color: rgba(255,255,255,0.65); font-size: 0.9rem; }
+
+        /* ── Tenant App Section ── */
+        .tenant-section { background: var(--bg); }
+
+        .tenant-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .tenant-text .section-header {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .tenant-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tenant-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+        }
+
+        .tenant-feature-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+
+        .tenant-feature h4 { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
+        .tenant-feature p { font-size: 0.85rem; color: var(--text-light); }
+
+        .phone-mockup {
+            background: var(--primary);
+            border-radius: 40px;
+            padding: 1.5rem;
+            max-width: 280px;
+            margin: 0 auto;
+            box-shadow: 0 40px 80px rgba(15,23,42,0.35);
+        }
+
+        .phone-screen {
+            background: #F8FAFC;
+            border-radius: 28px;
+            overflow: hidden;
+            min-height: 460px;
+        }
+
+        .phone-header {
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .phone-avatar {
+            width: 36px; height: 36px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 0.875rem; font-weight: 700;
+        }
+
+        .phone-apt-info h5 { font-size: 0.875rem; font-weight: 700; color: var(--primary); }
+        .phone-apt-info p { font-size: 0.75rem; color: var(--text-light); }
+
+        .phone-sections { padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .phone-item {
+            background: white;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .phone-item-icon { font-size: 1.125rem; }
+        .phone-item-text { font-size: 0.8rem; font-weight: 600; color: var(--primary); }
+
+        .phone-bottom-nav {
+            background: white;
+            border-top: 1px solid var(--border);
+            padding: 0.75rem;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 0.5rem;
+        }
+
+        .nav-tab { text-align: center; font-size: 0.65rem; color: var(--text-light); }
+        .nav-tab.active { color: var(--accent); font-weight: 600; }
+        .nav-tab span { display: block; font-size: 1.1rem; margin-bottom: 2px; }
+
+        /* ── Pricing ── */
+        .pricing { background: white; }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+
+        .pricing-card.popular {
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 20px 50px rgba(37,99,235,0.18);
+            transform: scale(1.03);
+        }
+
+        .pricing-card.popular:hover { transform: scale(1.03) translateY(-4px); }
+
+        .popular-badge {
+            position: absolute;
+            top: -14px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .pricing-plan { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+        .pricing-card h3 { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.375rem; }
+
+        .price {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0.75rem 0 0.25rem;
+            line-height: 1;
+        }
+
+        .price sub { font-size: 1rem; font-weight: 500; color: var(--text-light); vertical-align: bottom; }
+
+        .pricing-desc { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+
+        .pricing-features { list-style: none; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.625rem; }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .pricing-features li .check {
+            width: 20px; height: 20px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .pricing-card .btn { width: 100%; justify-content: center; }
+
+        /* ── CTA ── */
+        .cta-section {
+            padding: 5rem 2rem;
+            background: var(--gradient);
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; margin-bottom: 1rem; }
+        .cta-section p { font-size: 1.15rem; opacity: 0.9; max-width: 500px; margin: 0 auto 2rem; }
+        .cta-section .btn-white { background: white; color: var(--accent); font-weight: 700; }
+        .cta-section .btn-white:hover { background: #F0F9FF; transform: translateY(-2px); }
+        .cta-note { font-size: 0.875rem; opacity: 0.75; margin-top: 1rem; }
+
+        /* ── Footer ── */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand .logo { color: white; margin-bottom: 1rem; }
+        .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
+
+        .footer-col h4 { font-size: 0.875rem; font-weight: 700; margin-bottom: 1rem; color: rgba(255,255,255,0.9); }
+
+        .footer-col a {
+            display: block;
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover { color: white; }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-bottom p { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+
+        /* ── Modal (Login/Register) ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 440px;
+            transform: translateY(20px);
+            transition: transform 0.2s;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        }
+
+        .modal-overlay.active .modal { transform: translateY(0); }
+
+        .modal-tabs { display: flex; gap: 0; margin-bottom: 2rem; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+
+        .modal-tab {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background: white;
+            color: var(--text-light);
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .modal-tab.active { background: var(--primary); color: white; }
+
+        .modal h3 { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.375rem; }
+        .modal-subtitle { font-size: 0.9rem; color: var(--text-light); margin-bottom: 1.75rem; }
+
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--primary); margin-bottom: 0.375rem; }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: var(--primary);
+            background: var(--bg);
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus { outline: none; border-color: var(--accent); background: white; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .modal .btn-primary { width: 100%; justify-content: center; margin-top: 0.5rem; padding: 0.875rem; }
+
+        .modal-close {
+            position: absolute;
+            top: 1.25rem; right: 1.25rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .modal-close:hover { background: var(--bg); }
+        .modal { position: relative; }
+
+        .divider { display: flex; align-items: center; gap: 1rem; margin: 1.25rem 0; color: var(--text-light); font-size: 0.8rem; }
+        .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        .modal-link { font-size: 0.875rem; color: var(--text-light); text-align: center; margin-top: 1rem; }
+        .modal-link a { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .tenant-content { grid-template-columns: 1fr; }
+            .phone-mockup { display: none; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.25rem; }
+            .nav-links { display: none; }
+            .hero { padding: 7rem 1.25rem 4rem; }
+            .hero-stats { gap: 1.5rem; }
+            .pricing-card.popular { transform: none; }
+            .footer-content { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .footer-content { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-badge, .hero h1, .hero p, .hero-buttons {
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .hero h1 { animation-delay: 0.1s; }
+        .hero p { animation-delay: 0.2s; }
+        .hero-buttons { animation-delay: 0.3s; }
+
+        .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="main-nav">
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🏠</div>
+            UtleiePro
+        </a>
+        <div class="nav-links">
+            <a href="#funksjoner">Funksjoner</a>
+            <a href="#hvordan-det-virker">Hvordan det virker</a>
+            <a href="#leietaker-app">Leietaker-app</a>
+            <a href="#pris">Priser</a>
+        </div>
+        <div class="nav-actions">
+            <a href="dashboard.html" class="btn-ghost">Logg inn</a>
+            <a href="#" class="btn-nav" id="open-register">Kom i gang gratis</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="badge-pill">NY</span>
+            Plattformen som forenkler profesjonell utleie
+        </div>
+        <h1>All utleieadministrasjon<br><span>på ett sted</span></h1>
+        <p>Administrer boliger, kommuniser med leietakere, håndter skader og kontrakter – alt fra ett sentralt dashboard.</p>
+        <div class="hero-buttons">
+            <a href="#" class="btn btn-primary" id="hero-cta">
+                Start gratis prøve
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="dashboard.html" class="btn btn-secondary">
+                Se dashboardet
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">500+</div>
+                <div class="stat-label">Utleiere</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">12 000+</div>
+                <div class="stat-label">Boliger administrert</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4.9 ★</div>
+                <div class="stat-label">Gjennomsnittsvurdering</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section features" id="funksjoner">
+        <div class="section-header fade-up">
+            <div class="section-tag">Funksjoner</div>
+            <h2>Alt du trenger for profesjonell utleie</h2>
+            <p>UtleiePro samler alle verktøyene du trenger i ett system – spar tid og gi leietakerne en bedre opplevelse.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card fade-up">
+                <div class="feature-icon">🏠</div>
+                <h3>Boligoversikt</h3>
+                <p>Se alle boligene dine på ett sted med status, leietaker, og viktig informasjon. Enkel administrasjon av hele porteføljen.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon">📖</div>
+                <h3>Digitale velkomstguider</h3>
+                <p>Opprett skreddersydde guider for hver bolig med wifi-passord, husregler, vaskemaskininstruks og alt leietakere trenger.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon">💬</div>
+                <h3>Meldingssystem</h3>
+                <p>Kommuniser direkte med leietakere gjennom innebygd meldingstjeneste. Alle meldinger organisert per bolig.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon">🔧</div>
+                <h3>Skadehåndtering</h3>
+                <p>Leietakere rapporterer skader med bilder via appen. Du håndterer, tildeler og følger opp alt fra dashboardet.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon">📄</div>
+                <h3>Digitale kontrakter</h3>
+                <p>Opprett og send leiekontrakter for digital signering. Alle kontrakter lagres sikkert og er tilgjengelige for begge parter.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon">👥</div>
+                <h3>Team og tilganger</h3>
+                <p>Legg til ansatte og gi dem tilpassede tilganger. Vaktmester kan se skader, eiendomsforvalter kan se alt.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section how-it-works" id="hvordan-det-virker">
+        <div class="section-header fade-up">
+            <div class="section-tag" style="color:#67E8F9">Slik fungerer det</div>
+            <h2>Kom i gang på under 10 minutter</h2>
+            <p>Enkelt å sette opp, enkelt å bruke – for både deg og leietakerne dine.</p>
+        </div>
+        <div class="steps">
+            <div class="step fade-up">
+                <div class="step-number">1</div>
+                <h3>Registrer boligene dine</h3>
+                <p>Legg inn adresse, bilder, antall rom og annen informasjon om hver bolig i systemet.</p>
+            </div>
+            <div class="step fade-up">
+                <div class="step-number">2</div>
+                <h3>Opprett digital guide</h3>
+                <p>Lag en guide for boligen med alt leietakere trenger å vite – fra wifi til søppelsortering.</p>
+            </div>
+            <div class="step fade-up">
+                <div class="step-number">3</div>
+                <h3>Del kode med leietaker</h3>
+                <p>Leietakeren laster ned appen og legger inn koden for å få tilgang til guiden og kommunikasjonskanalen.</p>
+            </div>
+            <div class="step fade-up">
+                <div class="step-number">4</div>
+                <h3>Administrer alt fra dashboardet</h3>
+                <p>Svar på meldinger, håndter skader og forny kontrakter – alt fra ett sentralt sted.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tenant App Section -->
+    <section class="section tenant-section" id="leietaker-app">
+        <div class="tenant-content">
+            <div class="tenant-text">
+                <div class="section-header">
+                    <div class="section-tag">Leietaker-app</div>
+                    <h2>En app leietakerne elsker å bruke</h2>
+                    <p>Leietakere får én app som gir dem alt de trenger under leieforholdet – tilgjengelig 24/7.</p>
+                </div>
+                <div class="tenant-features">
+                    <div class="tenant-feature fade-up">
+                        <div class="tenant-feature-icon">📖</div>
+                        <div>
+                            <h4>Digital guide</h4>
+                            <p>Leietakeren finner alt de trenger om boligen – wifi, husregler, bruksanvisninger.</p>
+                        </div>
+                    </div>
+                    <div class="tenant-feature fade-up">
+                        <div class="tenant-feature-icon">💬</div>
+                        <div>
+                            <h4>Meldinger til utleier</h4>
+                            <p>Enkel kommunikasjon direkte i appen – ingen e-poster, ingen tekstmeldinger.</p>
+                        </div>
+                    </div>
+                    <div class="tenant-feature fade-up">
+                        <div class="tenant-feature-icon">📷</div>
+                        <div>
+                            <h4>Rapporter skader</h4>
+                            <p>Leietakeren tar bilde og beskriver problemet – du får det rett i dashboardet.</p>
+                        </div>
+                    </div>
+                    <div class="tenant-feature fade-up">
+                        <div class="tenant-feature-icon">✍️</div>
+                        <div>
+                            <h4>Digital signering</h4>
+                            <p>Les og signer leiekontrakten digitalt direkte i appen.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:2rem">
+                    <a href="tenant.html" class="btn btn-primary">Se leietaker-appen →</a>
+                </div>
+            </div>
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-header">
+                            <div class="phone-avatar">OP</div>
+                            <div class="phone-apt-info">
+                                <h5>Oppsal Terrasse 12B</h5>
+                                <p>Oslo · 2. etasje</p>
+                            </div>
+                        </div>
+                        <div class="phone-sections">
+                            <div class="phone-item">
+                                <span class="phone-item-icon">📶</span>
+                                <span class="phone-item-text">WiFi: HjemmeNett · passord123</span>
+                            </div>
+                            <div class="phone-item">
+                                <span class="phone-item-icon">🗑️</span>
+                                <span class="phone-item-text">Søppelsortering: Se guide</span>
+                            </div>
+                            <div class="phone-item">
+                                <span class="phone-item-icon">🔧</span>
+                                <span class="phone-item-text">Rapporter et problem</span>
+                            </div>
+                            <div class="phone-item">
+                                <span class="phone-item-icon">💬</span>
+                                <span class="phone-item-text">Melding til utleier</span>
+                            </div>
+                            <div class="phone-item">
+                                <span class="phone-item-icon">📄</span>
+                                <span class="phone-item-text">Min kontrakt</span>
+                            </div>
+                        </div>
+                        <div class="phone-bottom-nav">
+                            <div class="nav-tab active"><span>🏠</span>Hjem</div>
+                            <div class="nav-tab"><span>💬</span>Meldinger</div>
+                            <div class="nav-tab"><span>🔧</span>Skader</div>
+                            <div class="nav-tab"><span>📄</span>Kontrakt</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section pricing" id="pris">
+        <div class="section-header fade-up">
+            <div class="section-tag">Priser</div>
+            <h2>Enkle, transparente priser</h2>
+            <p>Velg planen som passer antall boliger du administrerer. Ingen skjulte gebyrer.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card fade-up">
+                <div class="pricing-plan">Starter</div>
+                <h3>Grunnpakke</h3>
+                <div class="price">499<sub> kr/md</sub></div>
+                <p class="pricing-desc">For deg som administrerer opptil 5 boliger</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Opptil 5 boliger</li>
+                    <li><span class="check">✓</span> Digitale guider</li>
+                    <li><span class="check">✓</span> Meldingssystem</li>
+                    <li><span class="check">✓</span> Skadehåndtering</li>
+                    <li><span class="check">✓</span> Leietaker-app</li>
+                    <li><span class="check">✓</span> E-poststøtte</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" onclick="openModal()">Start gratis prøve</a>
+            </div>
+            <div class="pricing-card popular fade-up">
+                <div class="popular-badge">Mest populær</div>
+                <div class="pricing-plan">Vekst</div>
+                <h3>Profesjonell</h3>
+                <div class="price">999<sub> kr/md</sub></div>
+                <p class="pricing-desc">For deg som administrerer opptil 20 boliger</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Opptil 20 boliger</li>
+                    <li><span class="check">✓</span> Alt i Grunnpakke</li>
+                    <li><span class="check">✓</span> Digitale kontrakter</li>
+                    <li><span class="check">✓</span> Team-tilganger</li>
+                    <li><span class="check">✓</span> Prioritetssupport</li>
+                    <li><span class="check">✓</span> E-postvarsler</li>
+                </ul>
+                <a href="#" class="btn btn-primary" onclick="openModal()">Start gratis prøve</a>
+            </div>
+            <div class="pricing-card fade-up">
+                <div class="pricing-plan">Enterprise</div>
+                <h3>Portefølje</h3>
+                <div class="price">2 490<sub> kr/md</sub></div>
+                <p class="pricing-desc">For selskaper med ubegrenset antall boliger</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Ubegrenset antall boliger</li>
+                    <li><span class="check">✓</span> Alt i Profesjonell</li>
+                    <li><span class="check">✓</span> API-tilgang</li>
+                    <li><span class="check">✓</span> Dedikert kontaktperson</li>
+                    <li><span class="check">✓</span> Egne integrasjoner</li>
+                    <li><span class="check">✓</span> Avansert statistikk</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" onclick="openModal()">Kontakt oss</a>
+            </div>
+        </div>
+        <p style="text-align:center; margin-top:2rem; color:var(--text-light); font-size:0.9rem;">Alle planer inkluderer 14 dagers gratis prøvetid. Ingen kredittkort kreves.</p>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>Klar for å forenkle utleien?</h2>
+        <p>Bli med hundrevis av profesjonelle utleiere som allerede bruker UtleiePro.</p>
+        <a href="#" class="btn btn-white" onclick="openModal()">
+            Kom i gang – det er gratis
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <p class="cta-note">14 dagers gratis prøvetid · Ingen bindingstid</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo" style="margin-bottom:0.75rem">
+                    <div class="logo-icon">🏠</div>
+                    UtleiePro
+                </div>
+                <p>Profesjonell utleieadministrasjon for eiendomsselskaper og utleiere i Norge.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produkt</h4>
+                <a href="#funksjoner">Funksjoner</a>
+                <a href="#pris">Priser</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="tenant.html">Leietaker-app</a>
+            </div>
+            <div class="footer-col">
+                <h4>Selskap</h4>
+                <a href="#">Om oss</a>
+                <a href="#">Blogg</a>
+                <a href="#">Karriere</a>
+                <a href="#">Kontakt</a>
+            </div>
+            <div class="footer-col">
+                <h4>Hjelp</h4>
+                <a href="#">Brukerveiledning</a>
+                <a href="#">FAQ</a>
+                <a href="#">Support</a>
+                <a href="#">Personvern</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 UtleiePro AS · Org.nr. 123 456 789</p>
+            <p>Personvern · Vilkår · Cookies</p>
+        </div>
+    </footer>
+
+    <!-- Login/Register Modal -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchTab('register')">Registrer deg</button>
+                <button class="modal-tab" onclick="switchTab('login')">Logg inn</button>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form">
+                <h3>Kom i gang</h3>
+                <p class="modal-subtitle">Opprett konto og start din gratis prøveperiode</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fornavn</label>
+                        <input type="text" placeholder="Ola" id="reg-firstname">
+                    </div>
+                    <div class="form-group">
+                        <label>Etternavn</label>
+                        <input type="text" placeholder="Nordmann" id="reg-lastname">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Firma / Navn</label>
+                    <input type="text" placeholder="Nordmann Eiendom AS" id="reg-company">
+                </div>
+                <div class="form-group">
+                    <label>E-postadresse</label>
+                    <input type="email" placeholder="ola@eksempel.no" id="reg-email">
+                </div>
+                <div class="form-group">
+                    <label>Passord</label>
+                    <input type="password" placeholder="Minst 8 tegn" id="reg-password">
+                </div>
+                <button class="btn btn-primary" onclick="handleRegister()">
+                    Opprett konto gratis
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+                <p class="modal-link">Har du allerede konto? <a href="#" onclick="switchTab('login')">Logg inn her</a></p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" style="display:none">
+                <h3>Velkommen tilbake</h3>
+                <p class="modal-subtitle">Logg inn på din UtleiePro-konto</p>
+                <div class="form-group">
+                    <label>E-postadresse</label>
+                    <input type="email" placeholder="ola@eksempel.no" id="login-email">
+                </div>
+                <div class="form-group">
+                    <label>Passord</label>
+                    <input type="password" placeholder="Ditt passord" id="login-password">
+                </div>
+                <button class="btn btn-primary" onclick="handleLogin()">
+                    Logg inn
+                </button>
+                <p class="modal-link">Ikke konto? <a href="#" onclick="switchTab('register')">Registrer deg gratis</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll nav shadow
+        window.addEventListener('scroll', () => {
+            document.getElementById('main-nav').style.boxShadow =
+                window.scrollY > 50 ? '0 4px 12px rgba(0,0,0,0.08)' : 'none';
+        });
+
+        // Fade-up animations
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Modal
+        function openModal() {
+            document.getElementById('auth-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('auth-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function switchTab(tab) {
+            document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+            document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+            document.querySelectorAll('.modal-tab').forEach((t, i) => {
+                t.classList.toggle('active', (i === 0 && tab === 'register') || (i === 1 && tab === 'login'));
+            });
+        }
+
+        document.getElementById('auth-modal').addEventListener('click', e => {
+            if (e.target === document.getElementById('auth-modal')) closeModal();
+        });
+
+        document.getElementById('open-register').addEventListener('click', e => { e.preventDefault(); openModal(); });
+        document.getElementById('hero-cta').addEventListener('click', e => { e.preventDefault(); openModal(); });
+
+        function handleRegister() {
+            const firstName = document.getElementById('reg-firstname').value.trim();
+            const lastName = document.getElementById('reg-lastname').value.trim();
+            const company = document.getElementById('reg-company').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+
+            if (!firstName || !email || !password) {
+                alert('Fyll ut alle obligatoriske felt');
+                return;
+            }
+
+            const user = {
+                id: 'user_' + Date.now(),
+                name: firstName + ' ' + lastName,
+                firstName, lastName, company, email,
+                plan: 'starter',
+                createdAt: new Date().toISOString()
+            };
+
+            localStorage.setItem('utleiepro_user', JSON.stringify(user));
+            localStorage.setItem('utleiepro_logged_in', '1');
+            initDemoData(user.id);
+            window.location.href = 'dashboard.html';
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            if (!email) { alert('Fyll inn e-post'); return; }
+
+            // For demo: accept any email
+            const existing = JSON.parse(localStorage.getItem('utleiepro_user') || 'null');
+            if (existing) {
+                localStorage.setItem('utleiepro_logged_in', '1');
+                window.location.href = 'dashboard.html';
+            } else {
+                // Create demo account
+                const user = {
+                    id: 'user_demo',
+                    name: 'Demo Bruker',
+                    firstName: 'Demo', lastName: 'Bruker',
+                    company: 'Demo Eiendom AS',
+                    email: email,
+                    plan: 'growth',
+                    createdAt: new Date().toISOString()
+                };
+                localStorage.setItem('utleiepro_user', JSON.stringify(user));
+                localStorage.setItem('utleiepro_logged_in', '1');
+                initDemoData(user.id);
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        function initDemoData(ownerId) {
+            if (localStorage.getItem('utleiepro_demo_initialized')) return;
+
+            const apartments = [
+                { id: 'apt1', ownerId, name: 'Oppsal Terrasse 12B', address: 'Oppsalveien 12B, 0686 Oslo', size: 72, rooms: 3, floor: 2, status: 'utleid', tenantId: 'ten1', guideId: 'guide1', images: [] },
+                { id: 'apt2', ownerId, name: 'Grünerløkka Studio', address: 'Thorvald Meyers gate 45, 0555 Oslo', size: 38, rooms: 1, floor: 4, status: 'utleid', tenantId: 'ten2', guideId: 'guide2', images: [] },
+                { id: 'apt3', ownerId, name: 'Majorstuen 3-roms', address: 'Sørkedalsveien 8, 0369 Oslo', size: 85, rooms: 3, floor: 1, status: 'utleid', tenantId: 'ten3', guideId: 'guide3', images: [] },
+                { id: 'apt4', ownerId, name: 'Frogner Leilighet', address: 'Bygdøy allé 22, 0262 Oslo', size: 95, rooms: 4, floor: 3, status: 'ledig', tenantId: null, guideId: null, images: [] },
+                { id: 'apt5', ownerId, name: 'Sagene 2-roms', address: 'Sandakerveien 64, 0484 Oslo', size: 54, rooms: 2, floor: 2, status: 'vedlikehold', tenantId: null, guideId: null, images: [] },
+            ];
+
+            const tenants = [
+                { id: 'ten1', ownerId, apartmentId: 'apt1', name: 'Kari Johansen', email: 'kari@eksempel.no', phone: '98765432', moveInDate: '2025-01-15' },
+                { id: 'ten2', ownerId, apartmentId: 'apt2', name: 'Erik Andersen', email: 'erik@eksempel.no', phone: '45678901', moveInDate: '2024-08-01' },
+                { id: 'ten3', ownerId, apartmentId: 'apt3', name: 'Ingrid Berg', email: 'ingrid@eksempel.no', phone: '91234567', moveInDate: '2024-11-01' },
+            ];
+
+            const guides = [
+                {
+                    id: 'guide1', ownerId, apartmentId: 'apt1', code: 'OPP123', published: true,
+                    sections: [
+                        { id: 's1', title: 'Velkomst', icon: '👋', content: 'Velkommen til Oppsal Terrasse 12B! Vi håper du vil trives her. Ikke nøl med å ta kontakt om du har spørsmål.' },
+                        { id: 's2', title: 'WiFi', icon: '📶', content: 'Nettverk: HjemmeNett_5G\nPassord: Terrasse2024!\n\nHvis det er problemer med nettverket, restart ruteren (grønn boks i stuen).' },
+                        { id: 's3', title: 'Søppelsortering', icon: '♻️', content: 'Søppelrom i kjelleren, kode: 1234\n\n• Matavfall: grønn pose\n• Papir/papp: blå container\n• Plast: gul container\n• Rest: grå container\n\nTømmes mandag og torsdag.' },
+                        { id: 's4', title: 'Vaskemaskin', icon: '👕', content: 'Vasskemaskin er i gangen. Bruk maks 60°. Tørkestativ henger på veggen.' },
+                        { id: 's5', title: 'Parkering', icon: '🚗', content: 'Parkeringsplass nr. 12 i garasjen i kjelleren. Adgang med nøkkelkort.' },
+                        { id: 's6', title: 'Husregler', icon: '📋', content: '• Ro etter kl 23 hverdager, kl 24 helger\n• Ikke røyking innendørs\n• Husdyr tillatt etter avtale\n• Fest meldes til utleier på forhånd' },
+                    ]
+                },
+                {
+                    id: 'guide2', ownerId, apartmentId: 'apt2', code: 'GRU456', published: true,
+                    sections: [
+                        { id: 's1', title: 'Velkomst', icon: '👋', content: 'Velkommen til Grünerløkka Studio! Fin leilighet i hjertet av Oslo. Spør om alt du lurer på.' },
+                        { id: 's2', title: 'WiFi', icon: '📶', content: 'Nettverk: Grüner_Fiber\nPassord: GrünGrün99' },
+                        { id: 's3', title: 'Varme', icon: '🌡️', content: 'Gulvvarme i bad og stue. Termostat på veggen i gangen. Anbefalt temperatur: 21°C.' },
+                    ]
+                },
+                {
+                    id: 'guide3', ownerId, apartmentId: 'apt3', code: 'MAJ789', published: true,
+                    sections: [
+                        { id: 's1', title: 'Velkomst', icon: '👋', content: 'Velkommen til Majorstuen! Rolig og sentral leilighet.' },
+                        { id: 's2', title: 'WiFi', icon: '📶', content: 'Nettverk: MajorNet\nPassord: Major2025' },
+                    ]
+                },
+            ];
+
+            const now = new Date();
+            const messages = [
+                { id: 'msg1', ownerId, apartmentId: 'apt1', tenantId: 'ten1', tenantName: 'Kari Johansen', content: 'Hei! Lurerom på om det er greit å ha venner på besøk i helgen?', timestamp: new Date(now - 2*3600000).toISOString(), read: false, replies: [] },
+                { id: 'msg2', ownerId, apartmentId: 'apt2', tenantId: 'ten2', tenantName: 'Erik Andersen', content: 'Lampen i stua er gått. Er det en reservepære et sted?', timestamp: new Date(now - 5*3600000).toISOString(), read: false, replies: [] },
+                { id: 'msg3', ownerId, apartmentId: 'apt3', tenantId: 'ten3', tenantName: 'Ingrid Berg', content: 'Takk for god oppfølging! Trives veldig godt her 😊', timestamp: new Date(now - 24*3600000).toISOString(), read: true, replies: [{ from: 'landlord', content: 'Hyggelig å høre! Si fra om det er noe.', timestamp: new Date(now - 23*3600000).toISOString() }] },
+                { id: 'msg4', ownerId, apartmentId: 'apt1', tenantId: 'ten1', tenantName: 'Kari Johansen', content: 'Når renner varmt vann normalt igjen? Det er litt kaldt nå.', timestamp: new Date(now - 48*3600000).toISOString(), read: true, replies: [] },
+            ];
+
+            const damages = [
+                { id: 'dmg1', ownerId, apartmentId: 'apt1', tenantId: 'ten1', tenantName: 'Kari Johansen', category: 'Rørlegger', description: 'Lekkasje under kjøkkenvasken. Plaster har ikke hjulpet.', status: 'ny', timestamp: new Date(now - 1*3600000).toISOString(), images: [], assignedTo: null },
+                { id: 'dmg2', ownerId, apartmentId: 'apt2', tenantId: 'ten2', tenantName: 'Erik Andersen', category: 'Elektrisk', description: 'En stikkontakt i stuen virker ikke.', status: 'under_behandling', timestamp: new Date(now - 3*24*3600000).toISOString(), images: [], assignedTo: 'emp1' },
+                { id: 'dmg3', ownerId, apartmentId: 'apt3', tenantId: 'ten3', tenantName: 'Ingrid Berg', category: 'Hvitevarer', description: 'Oppvaskmaskinen vasker ikke rent. Filteret er renset.', status: 'ferdig', timestamp: new Date(now - 7*24*3600000).toISOString(), images: [], assignedTo: 'emp1' },
+            ];
+
+            const contracts = [
+                { id: 'con1', ownerId, apartmentId: 'apt1', tenantId: 'ten1', tenantName: 'Kari Johansen', startDate: '2025-01-15', endDate: '2026-01-14', monthlyRent: 14500, status: 'signert', landlordSigned: true, tenantSigned: true, timestamp: '2025-01-10T10:00:00Z' },
+                { id: 'con2', ownerId, apartmentId: 'apt2', tenantId: 'ten2', tenantName: 'Erik Andersen', startDate: '2024-08-01', endDate: '2026-07-31', monthlyRent: 11000, status: 'signert', landlordSigned: true, tenantSigned: true, timestamp: '2024-07-25T10:00:00Z' },
+                { id: 'con3', ownerId, apartmentId: 'apt3', tenantId: 'ten3', tenantName: 'Ingrid Berg', startDate: '2024-11-01', endDate: '2025-10-31', monthlyRent: 17500, status: 'sendt', landlordSigned: true, tenantSigned: false, timestamp: '2024-10-28T10:00:00Z' },
+            ];
+
+            const employees = [
+                { id: 'emp1', ownerId, name: 'Per Vaktmester', email: 'per@utleie.no', role: 'Vaktmester', permissions: ['damages'] },
+                { id: 'emp2', ownerId, name: 'Anne Forvalter', email: 'anne@utleie.no', role: 'Eiendomsforvalter', permissions: ['damages', 'messages', 'contracts', 'apartments'] },
+            ];
+
+            localStorage.setItem('utleiepro_apartments', JSON.stringify(apartments));
+            localStorage.setItem('utleiepro_tenants', JSON.stringify(tenants));
+            localStorage.setItem('utleiepro_guides', JSON.stringify(guides));
+            localStorage.setItem('utleiepro_messages', JSON.stringify(messages));
+            localStorage.setItem('utleiepro_damages', JSON.stringify(damages));
+            localStorage.setItem('utleiepro_contracts', JSON.stringify(contracts));
+            localStorage.setItem('utleiepro_employees', JSON.stringify(employees));
+            localStorage.setItem('utleiepro_demo_initialized', '1');
+        }
+
+        // Auto-init demo data if not done
+        if (!localStorage.getItem('utleiepro_demo_initialized')) {
+            initDemoData('user_demo');
+        }
+    </script>
+</body>
+</html>
