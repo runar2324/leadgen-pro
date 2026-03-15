@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UtleiePro – Leietakerportal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: #fff;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── CODE ENTRY ── */
+    #code-entry-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px 24px;
+      background: #fff;
+    }
+
+    .logo-wrap {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .logo-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .logo-text {
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #2563EB, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .entry-heading {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e293b;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .entry-subtext {
+      font-size: 0.875rem;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    #access-code-input {
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: #1e293b;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 16px;
+    }
+
+    #access-code-input:focus {
+      border-color: #2563EB;
+    }
+
+    #access-code-input.error {
+      border-color: #ef4444;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: #2563EB;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    #error-message {
+      display: none;
+      color: #ef4444;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .demo-hint {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.8125rem;
+      color: #1d4ed8;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .demo-hint strong { font-weight: 700; }
+
+    /* ── MAIN APP ── */
+    #main-app { display: none; flex-direction: column; height: 100vh; overflow: hidden; }
+
+    /* Top bar */
+    #top-bar {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+      padding: 12px 20px;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    #top-apt-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #top-apt-address {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Bottom nav */
+    #bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: #fff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      z-index: 100;
+    }
+
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 4px 10px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: 'Inter', sans-serif;
+      transition: color 0.15s;
+      color: #94a3b8;
+      gap: 3px;
+    }
+
+    .nav-tab .nav-icon { font-size: 1.3rem; }
+    .nav-tab .nav-label { font-size: 0.65rem; font-weight: 600; }
+    .nav-tab.active { color: #2563EB; }
+
+    /* Tab content area */
+    #tab-content {
+      margin-top: 70px;
+      margin-bottom: 62px;
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-panel { display: none; padding: 16px; }
+    .tab-panel.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .gradient-card {
+      background: linear-gradient(135deg, #2563EB, #7c3aed);
+      border: none;
+      color: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+
+    .gradient-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
+    .gradient-card p { font-size: 0.875rem; opacity: 0.85; }
+
+    .info-card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .info-row:last-child { border-bottom: none; }
+    .info-label { font-size: 0.8125rem; color: #64748b; }
+    .info-value { font-size: 0.8125rem; font-weight: 600; color: #1e293b; }
+
+    /* Guide section cards */
+    .guide-section-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+      text-decoration: none;
+    }
+
+    .guide-section-card:hover { background: #f8fafc; box-shadow: 0 2px 8px rgba(37,99,235,0.08); }
+
+    .guide-section-icon { font-size: 1.4rem; margin-right: 12px; flex-shrink: 0; }
+    .guide-section-title { font-size: 0.9375rem; font-weight: 600; color: #1e293b; flex: 1; }
+    .guide-section-arrow { color: #94a3b8; font-size: 1rem; }
+
+    .section-heading {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 20px 0 10px;
+    }
+
+    /* Reset link */
+    .reset-link {
+      display: block;
+      text-align: center;
+      margin: 8px 0 20px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .reset-link:hover { color: #64748b; }
+
+    /* ── MESSAGES ── */
+    .messages-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .message-thread { display: flex; flex-direction: column; gap: 8px; }
+
+    .bubble-wrap-tenant { display: flex; justify-content: flex-end; }
+    .bubble-wrap-landlord { display: flex; justify-content: flex-start; }
+
+    .bubble {
+      max-width: 78%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 0.875rem;
+      line-height: 1.45;
+    }
+
+    .bubble-tenant {
+      background: #2563EB;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .bubble-landlord {
+      background: #f1f5f9;
+      color: #1e293b;
+      border-bottom-left-radius: 4px;
+    }
+
+    .bubble-time {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      margin-top: 3px;
+      text-align: right;
+    }
+
+    .bubble-time.left { text-align: left; }
+
+    .new-message-area {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 8px;
+    }
+
+    textarea.msg-textarea {
+      width: 100%;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      color: #1e293b;
+      transition: border-color 0.2s;
+      margin-bottom: 10px;
+    }
+
+    textarea.msg-textarea:focus { border-color: #2563EB; }
+
+    .btn-send {
+      background: #2563EB;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-send:hover { background: #1d4ed8; }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #94a3b8;
+    }
+
+    .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── DAMAGES ── */
+    .damage-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+
+    .damage-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .badge-category { background: #eff6ff; color: #2563EB; }
+    .badge-ny { background: #fee2e2; color: #dc2626; }
+    .badge-under_behandling { background: #fef3c7; color: #d97706; }
+    .badge-ferdig { background: #dcfce7; color: #16a34a; }
+
+    .damage-desc {
+      font-size: 0.875rem;
+      color: #374151;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .damage-date { font-size: 0.75rem; color: #94a3b8; }
+
+    .damage-form {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+
+    select.form-select,
+    textarea.form-textarea {
+      width: 100%;
+      border: 1px solid #e2e8f0;
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      color: #1e293b;
+      outline: none;
+      background: #fff;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+
+    select.form-select:focus,
+    textarea.form-textarea:focus { border-color: #2563EB; }
+
+    textarea.form-textarea { resize: vertical; min-height: 90px; }
+
+    input[type="file"].form-file {
+      width: 100%;
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .btn-report {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+
+    .btn-report:hover { background: #dc2626; }
+
+    .btn-outline {
+      background: transparent;
+      color: #2563EB;
+      border: 1.5px solid #2563EB;
+      border-radius: 9px;
+      padding: 9px 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+      margin-bottom: 14px;
+    }
+
+    .btn-outline:hover { background: #eff6ff; }
+
+    /* ── CONTRACT ── */
+    .sign-btn {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+
+    .sign-btn:hover { background: #15803d; }
+
+    .sign-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .sign-status-row:last-child { border-bottom: none; }
+    .sign-party { font-size: 0.875rem; font-weight: 600; color: #374151; }
+
+    .sign-badge-signed {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .sign-badge-pending {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .contract-text-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 0.8125rem;
+      color: #374151;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      max-height: 260px;
+      overflow-y: auto;
+      margin-bottom: 14px;
+    }
+
+    .success-card {
+      background: #dcfce7;
+      border: 1px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      color: #15803d;
+    }
+
+    .success-card .success-icon { font-size: 2rem; margin-bottom: 8px; }
+    .success-card p { font-size: 0.9rem; font-weight: 600; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-sheet {
+      background: #fff;
+      width: 100%;
+      max-width: 430px;
+      border-radius: 20px 20px 0 0;
+      padding: 24px 20px 32px;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .modal-icon { font-size: 1.8rem; }
+
+    .modal-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #1e293b;
+      flex: 1;
+    }
+
+    .modal-close {
+      background: #f1f5f9;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      transition: background 0.15s;
+    }
+
+    .modal-close:hover { background: #e2e8f0; }
+
+    .modal-content {
+      font-size: 0.9rem;
+      color: #374151;
+      white-space: pre-wrap;
+      line-height: 1.65;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- CODE ENTRY SCREEN -->
+  <div id="code-entry-screen">
+    <div class="logo-wrap">
+      <span class="logo-icon">🏠</span>
+      <span class="logo-text">UtleiePro</span>
+    </div>
+    <h1 class="entry-heading">Skriv inn tilgangskoden din</h1>
+    <p class="entry-subtext">Du mottar koden fra utleieren din</p>
+    <input
+      id="access-code-input"
+      type="text"
+      maxlength="6"
+      placeholder="KODE"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <div id="error-message">Ugyldig kode. Prøv igjen.</div>
+    <button class="btn-primary" onclick="submitCode()">Få tilgang</button>
+    <div class="demo-hint">
+      <strong>Demo:</strong> Prøv koden <strong>OPP123</strong>, <strong>GRU456</strong> eller <strong>MAJ789</strong>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="main-app">
+    <div id="top-bar">
+      <div id="top-apt-name">Laster...</div>
+      <div id="top-apt-address"></div>
+    </div>
+
+    <div id="tab-content">
+      <!-- Tab 1: Hjem -->
+      <div id="tab-hjem" class="tab-panel active">
+        <div class="gradient-card">
+          <h2 id="greeting-name">Hei!</h2>
+          <p id="greeting-apt"></p>
+        </div>
+        <div class="card">
+          <div class="info-card-title">Leilighetsinformasjon</div>
+          <div id="apt-info-rows"></div>
+        </div>
+        <div class="section-heading">Boligguide</div>
+        <div id="guide-sections-list"></div>
+        <a class="reset-link" onclick="resetSession()">Tilbakestill tilgang</a>
+      </div>
+
+      <!-- Tab 2: Meldinger -->
+      <div id="tab-meldinger" class="tab-panel">
+        <div class="section-heading" style="margin-top:4px;">Samtale med utleier</div>
+        <div id="messages-list" class="messages-list"></div>
+        <div class="new-message-area" style="margin-top:14px;">
+          <div class="info-card-title">Ny melding</div>
+          <textarea class="msg-textarea" id="new-msg-text" placeholder="Skriv din melding..."></textarea>
+          <button class="btn-send" onclick="sendMessage()">Send melding</button>
+        </div>
+      </div>
+
+      <!-- Tab 3: Skader -->
+      <div id="tab-skader" class="tab-panel">
+        <button class="btn-outline" onclick="toggleDamageForm()">+ Rapporter ny skade</button>
+        <div id="damage-form-wrap" style="display:none;">
+          <div class="damage-form">
+            <div class="info-card-title">Ny skaderapport</div>
+            <label class="form-label">Kategori</label>
+            <select class="form-select" id="damage-category">
+              <option value="Rørlegger">Rørlegger</option>
+              <option value="Elektrisk">Elektrisk</option>
+              <option value="Hvitevarer">Hvitevarer</option>
+              <option value="Vinduer/dører">Vinduer/dører</option>
+              <option value="Annet">Annet</option>
+            </select>
+            <label class="form-label">Beskrivelse</label>
+            <textarea class="form-textarea" id="damage-desc" placeholder="Beskriv skaden..."></textarea>
+            <label class="form-label">Last opp bilder (valgfritt)</label>
+            <input type="file" class="form-file" id="damage-photos" accept="image/*" multiple />
+            <button class="btn-report" onclick="submitDamage()">Send rapport</button>
+          </div>
+        </div>
+        <div id="damages-list"></div>
+      </div>
+
+      <!-- Tab 4: Kontrakt -->
+      <div id="tab-kontrakt" class="tab-panel">
+        <div id="contract-content"></div>
+      </div>
+    </div>
+
+    <nav id="bottom-nav">
+      <button class="nav-tab active" data-tab="hjem" onclick="switchTab('hjem',this)">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Hjem</span>
+      </button>
+      <button class="nav-tab" data-tab="meldinger" onclick="switchTab('meldinger',this)">
+        <span class="nav-icon">💬</span>
+        <span class="nav-label">Meldinger</span>
+      </button>
+      <button class="nav-tab" data-tab="skader" onclick="switchTab('skader',this)">
+        <span class="nav-icon">🔧</span>
+        <span class="nav-label">Skader</span>
+      </button>
+      <button class="nav-tab" data-tab="kontrakt" onclick="switchTab('kontrakt',this)">
+        <span class="nav-icon">📄</span>
+        <span class="nav-label">Kontrakt</span>
+      </button>
+    </nav>
+  </div>
+
+</div>
+
+<!-- GUIDE SECTION MODAL -->
+<div class="modal-overlay" id="guide-modal" onclick="closeGuideModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <span class="modal-icon" id="modal-sec-icon"></span>
+      <span class="modal-title" id="modal-sec-title"></span>
+      <button class="modal-close" onclick="closeGuideModalBtn()">✕</button>
+    </div>
+    <div class="modal-content" id="modal-sec-content"></div>
+  </div>
+</div>
+
+<script>
+// ──────────────────────────────────────────────────────────
+//  HELPERS
+// ──────────────────────────────────────────────────────────
+function relativeTime(iso) {
+  if (!iso) return '';
+  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (diff < 60) return 'Akkurat nå';
+  if (diff < 3600) { const m = Math.floor(diff / 60); return m + ' minutt' + (m === 1 ? '' : 'er') + ' siden'; }
+  if (diff < 86400) { const h = Math.floor(diff / 3600); return h + ' time' + (h === 1 ? '' : 'r') + ' siden'; }
+  if (diff < 604800) { const d = Math.floor(diff / 86400); return d + ' dag' + (d === 1 ? '' : 'er') + ' siden'; }
+  const w = Math.floor(diff / 604800); return w + ' uke' + (w === 1 ? '' : 'r') + ' siden';
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const months = ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'];
+  const d = new Date(iso);
+  return d.getDate() + '. ' + months[d.getMonth()] + ' ' + d.getFullYear();
+}
+
+function uid() { return '_' + Math.random().toString(36).substr(2, 9); }
+
+// ──────────────────────────────────────────────────────────
+//  localStorage helpers
+// ──────────────────────────────────────────────────────────
+function getStore(key) {
+  try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e) { return []; }
+}
+function setStore(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+// ──────────────────────────────────────────────────────────
+//  initDemoData
+// ──────────────────────────────────────────────────────────
+function initDemoData() {
+  if (localStorage.getItem('utleiepro_demo_initialized')) return;
+
+  const apartments = [
+    {id:'apt1',name:'Oppsal Terrasse 12B',address:'Oppsalveien 12B, 0686 Oslo',size:72,rooms:3,status:'utleid',tenantId:'ten1',guideId:'guide1'},
+    {id:'apt2',name:'Grünerløkka Studio',address:'Thorvald Meyers gate 45, 0555 Oslo',size:38,rooms:1,status:'utleid',tenantId:'ten2',guideId:'guide2'},
+    {id:'apt3',name:'Majorstuen 3-roms',address:'Sørkedalsveien 8, 0369 Oslo',size:85,rooms:3,status:'utleid',tenantId:'ten3',guideId:'guide3'},
+    {id:'apt4',name:'Frogner Leilighet',address:'Bygdøy allé 22, 0262 Oslo',size:95,rooms:4,status:'ledig',tenantId:null,guideId:null},
+    {id:'apt5',name:'Sagene 2-roms',address:'Sandakerveien 64, 0484 Oslo',size:54,rooms:2,status:'vedlikehold',tenantId:null,guideId:null}
+  ];
+
+  const tenants = [
+    {id:'ten1',apartmentId:'apt1',name:'Kari Johansen',email:'kari@eksempel.no',phone:'98765432'},
+    {id:'ten2',apartmentId:'apt2',name:'Erik Andersen',email:'erik@eksempel.no',phone:'45678901'},
+    {id:'ten3',apartmentId:'apt3',name:'Ingrid Berg',email:'ingrid@eksempel.no',phone:'91234567'}
+  ];
+
+  const guides = [
+    {id:'guide1',code:'OPP123',apartmentId:'apt1',sections:[
+      {id:'s1',title:'Velkomst',icon:'👋',content:'Velkommen! Vi håper du trives.'},
+      {id:'s2',title:'WiFi',icon:'📶',content:'Nettverk: HjemmeNett_5G\nPassord: Terrasse2024!'},
+      {id:'s3',title:'Søppelsortering',icon:'♻️',content:'Søppelrom i kjelleren, kode: 1234\nMatavfall: grønn pose\nPapir: blå container'},
+      {id:'s4',title:'Vaskemaskin',icon:'👕',content:'Vaskemaskin i gangen. Max 60°.'},
+      {id:'s5',title:'Parkering',icon:'🚗',content:'Plass nr. 12 i garasjen.'},
+      {id:'s6',title:'Husregler',icon:'📋',content:'Ro etter kl 23.\nIkke røyking innendørs.'}
+    ]},
+    {id:'guide2',code:'GRU456',apartmentId:'apt2',sections:[
+      {id:'s1',title:'Velkomst',icon:'👋',content:'Velkommen til Grünerløkka!'},
+      {id:'s2',title:'WiFi',icon:'📶',content:'Nettverk: Grüner_Fiber\nPassord: GrünGrün99'},
+      {id:'s3',title:'Varme',icon:'🌡️',content:'Gulvvarme i bad og stue.'}
+    ]},
+    {id:'guide3',code:'MAJ789',apartmentId:'apt3',sections:[
+      {id:'s1',title:'Velkomst',icon:'👋',content:'Velkommen til Majorstuen!'},
+      {id:'s2',title:'WiFi',icon:'📶',content:'Nettverk: MajorNet\nPassord: Major2025'}
+    ]}
+  ];
+
+  const now = new Date();
+  const daysAgo = (d) => new Date(now - d * 86400000).toISOString();
+
+  const messages = [
+    {id:uid(),apartmentId:'apt1',tenantId:'ten1',content:'Hei! Varmtvannet fungerer ikke. Kan dere se på det?',createdAt:daysAgo(3),replies:[
+      {id:uid(),content:'Hei Kari! Vi sender en rørlegger i morgen mellom kl 10-12.',createdAt:daysAgo(2)}
+    ]},
+    {id:uid(),apartmentId:'apt1',tenantId:'ten1',content:'Takk for rask respons! Fungerte perfekt etter besøket.',createdAt:daysAgo(1),replies:[]},
+    {id:uid(),apartmentId:'apt2',tenantId:'ten2',content:'Er det mulig å bytte til en større postkasse?',createdAt:daysAgo(5),replies:[
+      {id:uid(),content:'Vi skal sjekke hva vi kan gjøre, Erik.',createdAt:daysAgo(4)}
+    ]},
+    {id:uid(),apartmentId:'apt2',tenantId:'ten2',content:'Ellers er alt veldig bra i leiligheten!',createdAt:daysAgo(2),replies:[]}
+  ];
+
+  const damages = [
+    {id:uid(),apartmentId:'apt1',tenantId:'ten1',category:'Rørlegger',description:'Varmtvann fungerer ikke på kjøkkenet. Kranen drypper konstant og det er ingen varm side.',status:'ferdig',createdAt:daysAgo(10)},
+    {id:uid(),apartmentId:'apt2',tenantId:'ten2',category:'Elektrisk',description:'Stikkontakten i stuen gir gnister ved bruk. Farlig situasjon.',status:'under_behandling',createdAt:daysAgo(4)},
+    {id:uid(),apartmentId:'apt3',tenantId:'ten3',category:'Vinduer/dører',description:'Balkongdøren lukkes ikke ordentlig, kald luft slipper inn.',status:'ny',createdAt:daysAgo(1)}
+  ];
+
+  const contracts = [
+    {id:uid(),tenantId:'ten1',apartmentId:'apt1',tenantName:'Kari Johansen',startDate:'2024-01-01',endDate:'2025-12-31',monthlyRent:12500,landlordSigned:true,tenantSigned:true,status:'signert',signedDate:'2023-12-20'},
+    {id:uid(),tenantId:'ten2',apartmentId:'apt2',tenantName:'Erik Andersen',startDate:'2024-03-01',endDate:'2025-02-28',monthlyRent:9800,landlordSigned:true,tenantSigned:false,status:'sendt',signedDate:null},
+    {id:uid(),tenantId:'ten3',apartmentId:'apt3',tenantName:'Ingrid Berg',startDate:'2024-06-01',endDate:'2026-05-31',monthlyRent:15000,landlordSigned:true,tenantSigned:false,status:'sendt',signedDate:null}
+  ];
+
+  setStore('utleiepro_apartments', apartments);
+  setStore('utleiepro_tenants', tenants);
+  setStore('utleiepro_guides', guides);
+  setStore('utleiepro_messages', messages);
+  setStore('utleiepro_damages', damages);
+  setStore('utleiepro_contracts', contracts);
+  localStorage.setItem('utleiepro_demo_initialized', '1');
+}
+
+// ──────────────────────────────────────────────────────────
+//  SESSION
+// ──────────────────────────────────────────────────────────
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('utleiepro_tenant_session')); } catch(e) { return null; }
+}
+
+function resetSession() {
+  if (confirm('Er du sikker på at du vil tilbakestille tilgangen?')) {
+    localStorage.removeItem('utleiepro_tenant_session');
+    location.reload();
+  }
+}
+
+// ──────────────────────────────────────────────────────────
+//  CODE ENTRY
+// ──────────────────────────────────────────────────────────
+document.getElementById('access-code-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') submitCode();
+});
+
+function submitCode() {
+  const input = document.getElementById('access-code-input');
+  const errEl = document.getElementById('error-message');
+  const code = input.value.trim().toUpperCase();
+
+  if (!code) { showError('Vennligst skriv inn en kode.'); return; }
+
+  const guides = getStore('utleiepro_guides');
+  const guide = guides.find(g => g.code.toUpperCase() === code);
+
+  if (!guide) {
+    showError('Ugyldig kode. Prøv igjen.');
+    input.classList.add('error');
+    return;
+  }
+
+  input.classList.remove('error');
+  errEl.style.display = 'none';
+
+  const apartments = getStore('utleiepro_apartments');
+  const apartment = apartments.find(a => a.id === guide.apartmentId);
+
+  const tenants = getStore('utleiepro_tenants');
+  const tenant = apartment && apartment.tenantId
+    ? tenants.find(t => t.id === apartment.tenantId) || {id:'demo_tenant', name:'Leietaker'}
+    : {id:'demo_tenant', name:'Leietaker'};
+
+  const session = {
+    guideId: guide.id,
+    apartmentId: guide.apartmentId,
+    tenantId: tenant.id,
+    tenantName: tenant.name
+  };
+
+  localStorage.setItem('utleiepro_tenant_session', JSON.stringify(session));
+  showMainApp(session);
+}
+
+function showError(msg) {
+  const errEl = document.getElementById('error-message');
+  errEl.textContent = msg;
+  errEl.style.display = 'block';
+}
+
+// ──────────────────────────────────────────────────────────
+//  MAIN APP INIT
+// ──────────────────────────────────────────────────────────
+function showMainApp(session) {
+  document.getElementById('code-entry-screen').style.display = 'none';
+  const mainApp = document.getElementById('main-app');
+  mainApp.style.display = 'flex';
+
+  const apartments = getStore('utleiepro_apartments');
+  const apartment = apartments.find(a => a.id === session.apartmentId) || {};
+
+  document.getElementById('top-apt-name').textContent = apartment.name || 'Min leilighet';
+  document.getElementById('top-apt-address').textContent = apartment.address || '';
+
+  renderHjem(session, apartment);
+  renderMeldinger(session);
+  renderSkader(session);
+  renderKontrakt(session, apartment);
+}
+
+// ──────────────────────────────────────────────────────────
+//  TABS
+// ──────────────────────────────────────────────────────────
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ──────────────────────────────────────────────────────────
+//  TAB 1: HJEM
+// ──────────────────────────────────────────────────────────
+function renderHjem(session, apartment) {
+  document.getElementById('greeting-name').textContent = 'Hei, ' + session.tenantName + '! 👋';
+  document.getElementById('greeting-apt').textContent = apartment.name || '';
+
+  const rows = document.getElementById('apt-info-rows');
+  rows.innerHTML = '';
+
+  const infoItems = [
+    {label: 'Adresse', value: apartment.address || '–'},
+    {label: 'Størrelse', value: apartment.size ? apartment.size + ' m²' : '–'},
+    {label: 'Antall rom', value: apartment.rooms ? apartment.rooms + ' rom' : '–'},
+    {label: 'Status', value: apartment.status ? statusLabel(apartment.status) : '–'}
+  ];
+
+  infoItems.forEach(item => {
+    rows.innerHTML += `<div class="info-row"><span class="info-label">${item.label}</span><span class="info-value">${item.value}</span></div>`;
+  });
+
+  const guides = getStore('utleiepro_guides');
+  const guide = guides.find(g => g.id === session.guideId);
+  const list = document.getElementById('guide-sections-list');
+  list.innerHTML = '';
+
+  if (!guide || !guide.sections || guide.sections.length === 0) {
+    list.innerHTML = '<p style="color:#94a3b8;font-size:0.875rem;text-align:center;padding:20px 0;">Ingen guideseksjoner tilgjengelig.</p>';
+    return;
+  }
+
+  guide.sections.forEach(sec => {
+    const card = document.createElement('div');
+    card.className = 'guide-section-card';
+    card.innerHTML = `<span class="guide-section-icon">${sec.icon}</span><span class="guide-section-title">${sec.title}</span><span class="guide-section-arrow">›</span>`;
+    card.onclick = () => openGuideModal(sec);
+    list.appendChild(card);
+  });
+}
+
+function statusLabel(s) {
+  const map = {utleid:'Utleid', ledig:'Ledig', vedlikehold:'Under vedlikehold'};
+  return map[s] || s;
+}
+
+// ── Guide Modal ──
+function openGuideModal(sec) {
+  document.getElementById('modal-sec-icon').textContent = sec.icon;
+  document.getElementById('modal-sec-title').textContent = sec.title;
+  document.getElementById('modal-sec-content').textContent = sec.content;
+  document.getElementById('guide-modal').classList.add('open');
+}
+
+function closeGuideModal(e) {
+  if (e.target === document.getElementById('guide-modal')) {
+    document.getElementById('guide-modal').classList.remove('open');
+  }
+}
+
+function closeGuideModalBtn() {
+  document.getElementById('guide-modal').classList.remove('open');
+}
+
+// ──────────────────────────────────────────────────────────
+//  TAB 2: MELDINGER
+// ──────────────────────────────────────────────────────────
+function renderMeldinger(session) {
+  const messages = getStore('utleiepro_messages');
+  const aptMsgs = messages.filter(m => m.apartmentId === session.apartmentId);
+  const container = document.getElementById('messages-list');
+  container.innerHTML = '';
+
+  if (aptMsgs.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">💬</div>
+        <p>Ingen meldinger ennå. Send din første melding!</p>
+      </div>`;
+    return;
+  }
+
+  aptMsgs.forEach(msg => {
+    const thread = document.createElement('div');
+    thread.className = 'message-thread';
+
+    // Tenant bubble (right)
+    thread.innerHTML += `
+      <div class="bubble-wrap-tenant">
+        <div>
+          <div class="bubble bubble-tenant">${escHtml(msg.content)}</div>
+          <div class="bubble-time">${relativeTime(msg.createdAt)}</div>
+        </div>
+      </div>`;
+
+    // Replies (landlord, left)
+    if (msg.replies && msg.replies.length > 0) {
+      msg.replies.forEach(reply => {
+        thread.innerHTML += `
+          <div class="bubble-wrap-landlord">
+            <div>
+              <div class="bubble bubble-landlord">${escHtml(reply.content)}</div>
+              <div class="bubble-time left">${relativeTime(reply.createdAt)}</div>
+            </div>
+          </div>`;
+      });
+    }
+
+    container.appendChild(thread);
+  });
+}
+
+function sendMessage() {
+  const session = getSession();
+  if (!session) return;
+  const textarea = document.getElementById('new-msg-text');
+  const text = textarea.value.trim();
+  if (!text) { textarea.focus(); return; }
+
+  const messages = getStore('utleiepro_messages');
+  messages.push({
+    id: uid(),
+    apartmentId: session.apartmentId,
+    tenantId: session.tenantId,
+    content: text,
+    createdAt: new Date().toISOString(),
+    replies: []
+  });
+  setStore('utleiepro_messages', messages);
+  textarea.value = '';
+  renderMeldinger(session);
+}
+
+// ──────────────────────────────────────────────────────────
+//  TAB 3: SKADER
+// ──────────────────────────────────────────────────────────
+function renderSkader(session) {
+  const damages = getStore('utleiepro_damages');
+  const aptDmgs = damages.filter(d => d.apartmentId === session.apartmentId);
+  const container = document.getElementById('damages-list');
+  container.innerHTML = '';
+
+  if (aptDmgs.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">✅</div>
+        <p>Ingen skader rapportert. Flott!</p>
+      </div>`;
+    return;
+  }
+
+  aptDmgs.forEach(d => {
+    const statusMap = {
+      ny: {cls:'badge-ny', label:'Ny'},
+      under_behandling: {cls:'badge-under_behandling', label:'Under behandling'},
+      ferdig: {cls:'badge-ferdig', label:'Ferdig'}
+    };
+    const st = statusMap[d.status] || {cls:'badge-ny', label: d.status};
+    container.innerHTML += `
+      <div class="damage-card">
+        <div class="damage-card-top">
+          <span class="badge badge-category">${escHtml(d.category)}</span>
+          <span class="badge ${st.cls}">${st.label}</span>
+        </div>
+        <div class="damage-desc">${escHtml(d.description)}</div>
+        <div class="damage-date">${formatDate(d.createdAt)}</div>
+      </div>`;
+  });
+}
+
+function toggleDamageForm() {
+  const wrap = document.getElementById('damage-form-wrap');
+  wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+}
+
+function submitDamage() {
+  const session = getSession();
+  if (!session) return;
+  const category = document.getElementById('damage-category').value;
+  const desc = document.getElementById('damage-desc').value.trim();
+  if (!desc) { document.getElementById('damage-desc').focus(); return; }
+
+  const damages = getStore('utleiepro_damages');
+  damages.push({
+    id: uid(),
+    apartmentId: session.apartmentId,
+    tenantId: session.tenantId,
+    category,
+    description: desc,
+    status: 'ny',
+    createdAt: new Date().toISOString()
+  });
+  setStore('utleiepro_damages', damages);
+
+  document.getElementById('damage-desc').value = '';
+  document.getElementById('damage-photos').value = '';
+  document.getElementById('damage-form-wrap').style.display = 'none';
+  renderSkader(session);
+}
+
+// ──────────────────────────────────────────────────────────
+//  TAB 4: KONTRAKT
+// ──────────────────────────────────────────────────────────
+function renderKontrakt(session, apartment) {
+  const contracts = getStore('utleiepro_contracts');
+  const contract = contracts.find(c => c.tenantId === session.tenantId || c.apartmentId === session.apartmentId);
+  const container = document.getElementById('contract-content');
+  container.innerHTML = '';
+
+  if (!contract) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <p>Ingen kontrakt funnet.</p>
+      </div>`;
+    return;
+  }
+
+  // Contract info card
+  container.innerHTML += `
+    <div class="card">
+      <div class="info-card-title">Kontraktdetaljer</div>
+      <div class="info-row"><span class="info-label">Leietaker</span><span class="info-value">${escHtml(contract.tenantName)}</span></div>
+      <div class="info-row"><span class="info-label">Adresse</span><span class="info-value">${escHtml(apartment.address || '–')}</span></div>
+      <div class="info-row"><span class="info-label">Leieperiode</span><span class="info-value">${formatDate(contract.startDate)} – ${formatDate(contract.endDate)}</span></div>
+      <div class="info-row"><span class="info-label">Månedlig leie</span><span class="info-value">${contract.monthlyRent ? contract.monthlyRent.toLocaleString('nb-NO') + ' kr' : '–'}</span></div>
+    </div>`;
+
+  // Signing status
+  container.innerHTML += `
+    <div class="card">
+      <div class="info-card-title">Signeringsstatus</div>
+      <div class="sign-status-row">
+        <span class="sign-party">Utleier</span>
+        ${contract.landlordSigned
+          ? '<span class="sign-badge-signed">✓ Signert</span>'
+          : '<span class="sign-badge-pending">⏳ Ikke signert</span>'}
+      </div>
+      <div class="sign-status-row">
+        <span class="sign-party">Leietaker</span>
+        ${contract.tenantSigned
+          ? '<span class="sign-badge-signed">✓ Signert</span>'
+          : '<span class="sign-badge-pending">⏳ Ikke signert</span>'}
+      </div>
+    </div>`;
+
+  // If contract sent and not signed by tenant
+  if (contract.status === 'sendt' && !contract.tenantSigned) {
+    const contractText = `LEIEKONTRAKT
+
+Mellom utleier og ${contract.tenantName} for eiendommen ${apartment.address || '–'}.
+
+Leieperiode: ${formatDate(contract.startDate)} til ${formatDate(contract.endDate)}
+Månedlig leie: ${contract.monthlyRent ? contract.monthlyRent.toLocaleString('nb-NO') : '–'} kr
+
+Leietaker forplikter seg til å:
+1. Betale husleie innen den 1. i hver måned.
+2. Behandle leiligheten med omhu og varsle om skader.
+3. Ikke fremleie uten skriftlig samtykke fra utleier.
+4. Overholde husordensregler og vedtekter.
+5. Forlate leiligheten i samme stand som ved innflytting.
+
+Utleier forplikter seg til å:
+1. Stille leiligheten til leietakers disposisjon i kontraktsperioden.
+2. Utføre nødvendig vedlikehold av boligen.
+3. Varsle om adgang til boligen med minst 24 timers varsel.
+
+Denne kontrakten er bindende for begge parter og er underlagt norsk leielovgivning.`;
+
+    const contractCard = document.createElement('div');
+    contractCard.className = 'card';
+    contractCard.innerHTML = `
+      <div class="info-card-title">Kontrakttekst</div>
+      <div class="contract-text-box">${escHtml(contractText)}</div>
+      <button class="sign-btn" onclick="signContract('${contract.id}')">Signer kontrakt digitalt</button>`;
+    container.appendChild(contractCard);
+  }
+
+  // Signed state
+  if (contract.status === 'signert' || (contract.tenantSigned && contract.landlordSigned)) {
+    container.innerHTML += `
+      <div class="success-card">
+        <div class="success-icon">✅</div>
+        <p>Kontrakt signert${contract.signedDate ? ' – ' + formatDate(contract.signedDate) : ''}</p>
+      </div>`;
+  }
+}
+
+function signContract(contractId) {
+  if (!confirm('Er du sikker på at du vil signere kontrakten?')) return;
+
+  const session = getSession();
+  const contracts = getStore('utleiepro_contracts');
+  const idx = contracts.findIndex(c => c.id === contractId);
+  if (idx === -1) return;
+
+  contracts[idx].tenantSigned = true;
+  contracts[idx].status = 'signert';
+  contracts[idx].signedDate = new Date().toISOString();
+  setStore('utleiepro_contracts', contracts);
+
+  const apartments = getStore('utleiepro_apartments');
+  const apartment = apartments.find(a => a.id === session.apartmentId) || {};
+  renderKontrakt(session, apartment);
+}
+
+// ──────────────────────────────────────────────────────────
+//  UTILITY
+// ──────────────────────────────────────────────────────────
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ──────────────────────────────────────────────────────────
+//  BOOT
+// ──────────────────────────────────────────────────────────
+(function boot() {
+  initDemoData();
+  const session = getSession();
+  if (session) {
+    document.getElementById('code-entry-screen').style.display = 'none';
+    showMainApp(session);
+  }
+})();
+</script>
+</body>
+</html>
